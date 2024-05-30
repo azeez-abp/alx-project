@@ -3,5 +3,5 @@
 ## Backend 
 - python flask, flask_restful app
 
-## Front 
+## Frontend 
 - Nextjs 

@@ -16,7 +16,7 @@ class Users(BaseModel, Base):
     middle_name = Column(String(60), nullable=False)
     last_name = Column(String(60), nullable=False)
     email = Column(String(225), nullable=False, unique=True)
-    password = Column(String(64), nullable=False)  # Changed to LargeBinary
+    password = Column(String(225), nullable=False)  # Changed to LargeBinary
     gender = Column(String(15), nullable=False)
     date_of_birth = Column(DateTime, nullable=False)
     addresses = relationship("Addresses", backref="users",

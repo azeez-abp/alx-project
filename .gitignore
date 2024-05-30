@@ -4,3 +4,4 @@ backend/weathe.json
 backend/uploads
 frontend/node_modules
 backend/.mypy_cache
+backend/**/*/id_rs*
