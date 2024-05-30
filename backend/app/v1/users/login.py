@@ -24,8 +24,7 @@ class UserLogin(Resource):
         # data = storage.get_instance().query(Users).
         # get({"email": request.json.get('email')})
         # Convert the data into a format that can tbe serialized to JS#ON
-        print(data)
-
+        
         if data is None:
             return make_response(jsonify({"error": f"User with email\
                                           :{body.get('email')} not found",
@@ -37,10 +36,9 @@ class UserLogin(Resource):
             return make_response(jsonify({"error": "Invalid credential",
                                           "data": ""}), 404)
         json_data = encodes_(data.user_id, data.email)
-        print(data.email,  pass_check, json_data)
-        user_data = decode_(json_data)
-        print(user_data)
-
+        # print(data.email,  pass_check, json_data)
+        # user_data = decode_(json_data)
+        # print(user_data)
 
         return make_response(jsonify({"success": "User atempt to login",
                                       "data": json_data}), 200)

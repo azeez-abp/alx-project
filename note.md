@@ -4,7 +4,7 @@ pip freeze > requirements.txt
 pip install -r  requirements.txt
 alx-venv/Scripts/activate
  git rm -r --cached
-flask --app app.app run
+flask --app app.app run --debug
 
 export PATH = $PATH:"/c/Users/Adeyori/alx-project/backend/alx-venv/Scripts/"
 
@@ -508,4 +508,13 @@ if __name__ == '__main__':
 When you run this application and make a GET request to `/users/1`, it will return the user data formatted as specified in `resource_fields`. If the user with the specified `user_id` does not exist, it will return a 404 error with a message indicating that the user was not found.
   
 
+root password reset for mysql
+- mysqladmin --user=root password "root"
+-  C:\xampp\mysql\bin\mysqld --init-file=mysql-init.txt
 
+Plugin 'FEEDBACK' is disabled.
+ cpoy all from myql folder in data
+
+ (MySQLdb.OperationalError) (1813, "Tablespace for table '`dbname`.`tablename`' exists. Please DISCARD the tablespace before IMPORT")
+
+ go into your data folder, delete the content of folder or the db folder
