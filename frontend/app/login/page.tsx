@@ -9,8 +9,8 @@ import { useRouter } from 'next/navigation'
 
 const spinner_style = {
   position: 'absolute',
-  right: '7em',
-  top: '5px'
+  left: '17em',
+  top: '-18px'
 }
 
 
@@ -20,13 +20,13 @@ export default function Home(): any {
       showLoader:false,
       error:false, 
       info:"", 
-      inputData:{},
+      inputData:{email:"", password:""},
       suc:false})
      
      const disble_button = {
-      pointerEvent: loginState.showLoader?'none':'all',
-      opacity:loginState.showLoader?'0.4':'1',
-      cursor:loginState.showLoader?'none':'pointer'
+      pointerEvents: loginState.showLoader ? 'none' : 'all',
+      opacity:loginState.showLoader ? '0.4' : '1',
+      cursor:loginState.showLoader ? 'none' : 'pointer'
     }
 /**
  * sigIn - function for signing user
@@ -47,7 +47,7 @@ interface ResponseDataSuc{
  const signIn = (e: any) :boolean => {
     e.preventDefault()
     setLoginState({...loginState,showLoader:true,error:false})
-    console.log(JSON.stringify(loginState.inputData) == '{}')
+  
     if (
       loginState.inputData['email'] === undefined
        || 
@@ -56,7 +56,6 @@ interface ResponseDataSuc{
       {
         setLoginState({
           ...loginState,
-          showLoader:true,
           error:true,
           info: "Email and password are required",
           showLoader:false
@@ -89,9 +88,9 @@ interface ResponseDataSuc{
             router.push('/dashboard')
           },2000)
       })
-    } catch (error) {
-        console.log(error, "ERROR")
-        setLoginState({...loginState,showLoader:true,error:true, info: error})
+    } catch (error:any) {
+     
+        setLoginState({...loginState,showLoader:true,error:true, info: error.message})
     }
    
 
@@ -176,7 +175,7 @@ const getInput = (e:any)=>{
             <div>
             <Button name="Sign in"  onclick={signIn} styles_button={{background: "rgb(79 70 229/.4)",
               height:"28px", fontWeight: 500, position: 'relative', ...disble_button, minWidth:"100%"} } >
-                <span className="loading loading-spinner loading-sm"  style = {{...spinner_style, display: loginState.showLoader?'block':'none'}}></span>
+                <span className="loading loading-spinner loading-sm"  style = {{...spinner_style, position: "relative", display: loginState.showLoader?"block":"none"}}></span>
               </Button> 
             </div>
           </form>

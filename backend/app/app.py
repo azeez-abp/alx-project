@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """ Flask Application """
-from os import environ
-from flask import Flask, make_response, jsonify  # type: ignore
+from os import environ, path, makedirs
+from flask import (Flask, make_response, jsonify,  # type: ignore
+                   send_from_directory)  
 from flask_restful import Resource, Api  # type: ignore
 from flask_cors import CORS  # type: ignore
 from flasgger import Swagger  # type: ignore
@@ -15,6 +16,14 @@ app.register_blueprint(users_route)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 # parser = reqparse.RequestParser()
 
+UPLOAD_FOLDER = path.join(path.dirname(path.abspath(__file__)), 'uploads')
+if not path.exists(UPLOAD_FOLDER):
+    makedirs(UPLOAD_FOLDER)
+
+
+# @app.route('/uploads/<filename>')
+# def get_image(filename):
+#     return send_from_directory(UPLOAD_FOLDER, filename)
 
 @app.teardown_appcontext
 def close_db(error):
@@ -55,7 +64,15 @@ class HelloWorld(Resource):
         return {'hello': 'world'}
 
 
+class GetFile(Resource):
+    def get(self, filename):
+        print(filename)
+        return send_from_directory(UPLOAD_FOLDER,
+                                   filename)
+
+
 api.add_resource(HelloWorld, '/')
+api.add_resource(GetFile, '/uploads/<filename>')
 
 if __name__ == "__main__":
     """ Main Function """

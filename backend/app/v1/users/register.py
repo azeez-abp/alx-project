@@ -8,7 +8,7 @@ from app.models.schemas.users.user import Users
 from app.models.schemas.general.address import Addresses
 from app.libs.password import hash_password
 import uuid
-
+from app.libs.upload_file import upload
 # Define the expected structure for success and error responses
 response_obj_template = {
     'success': fields.String,
@@ -23,7 +23,7 @@ response_obj_template = {
 class UserRegister(Resource):
     """Class for registering a user."""
     @swag_from('documentation/register.yml')
-    @marshal_with(response_obj_template, envelope='response')
+    @marshal_with(response_obj_template)
     def post(self):
         parser = reqparse.RequestParser()
         # Validate input
@@ -38,8 +38,18 @@ class UserRegister(Resource):
         parser.add_argument('password', type=str, required=True,
                             help='Password must be a \
                                 string and cannot be blank')
+        parser.add_argument('street', type=str, required=True,
+                            help='Street must be a \
+                                string and cannot be blank')
         parser.add_argument('file', type=str, required=False)
+
         data_all = request.get_json()
+        print(data_all['profile_pix_name'], "ALL DATRA")
+        output_path = upload(data_all['profile_pix'],
+                             data_all['profile_pix_name'])
+        if 'error' in output_path:
+            return {'error': output_path['error']}
+        print(output_path, "MO")
         user_id = uuid.uuid4()
         new_address = Addresses(
             user_id=user_id,

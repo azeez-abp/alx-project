@@ -33,20 +33,20 @@ export default function Home(): any {
        <div className='body flex min-h-screen flex-col w-full' style={{backgroundImage: 'url("./images/farm.jpg")', backgroundSize:"cover", backgroundRepeat:'no-repeat'}}>
              
              
-             <div className='flex justify-center h-screen content-center flex-wrap'> 
+             <div className='flex justify-center h-screen content-center flex-wrap p-5'> 
 
 
-                <div className="flex-1 w-50 text-center">
+                <div className="flex-1 w-50 text-left">
+
                     <h1 style={{fontSize:'30px'}}>My Farm Insight</h1> 
-                    <div style={{marginLeft:'16em', width: '50%'}} className='text-start'>Monitor the activity on farm, Know the chemistry of 
-                      drug administered to farm animals
+                    <div style={{width: '50%'}} className='text-start'>Monitor the activity on farm, Know the chemistry of  drug administered to farm animals
                       </div>
                 </div>
 
 
-                <div className="flex-1 w-50 text-center">
-                <h1 style={{fontSize:'30px'}}>Imporve Farm Performance</h1> 
-                <div style={{marginLeft:'11em', width: '50%'}} className='text-start'>Increase sale and generate more revenue for your farm
+                <div className="flex-1 w-50 text-left">
+                <h1 style={{fontSize:'30px'}}>Improve Farm Performance</h1> 
+                <div style={{ width: '50%'}} className='text-start'>Increase sale and generate more revenue for your farm
                       </div>
                 </div>
  

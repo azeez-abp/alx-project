@@ -2,8 +2,13 @@
 import React from 'react'
 
 const Dashboard = () => {
+
+
   return (
-    <div>Dashboard</div>
+    <>
+     <input  className='toggle theme-controller' type='checkbox' value={'mytheme'}/>
+  </>
+    
   )
 }
 
