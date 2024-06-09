@@ -6,3 +6,4 @@ frontend/node_modules
 backend/.mypy_cache
 backend/**/*/id_rs*
 backend/**/*/__pycache__
+__pycache__
