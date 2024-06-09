@@ -5,7 +5,8 @@ pip install -r  requirements.txt
 alx-venv/Scripts/activate
  git rm -r --cached
 flask --app app.app run --debug
-
+git rm -r --cached ./**/*__pyca*
+``
 export PATH = $PATH:"/c/Users/Adeyori/alx-project/backend/alx-venv/Scripts/"
 
 export PATH=$PATH:"/c/Users/Adeyori/alx-project/backend/alx-venv/Scripts/" (for bash in window os)
