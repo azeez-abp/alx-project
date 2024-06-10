@@ -2,7 +2,7 @@
 """ Flask Application """
 from os import environ, path, makedirs
 from flask import (Flask, make_response, jsonify,  # type: ignore
-                   send_from_directory)  
+                   send_from_directory)
 from flask_restful import Resource, Api  # type: ignore
 from flask_cors import CORS  # type: ignore
 from flasgger import Swagger  # type: ignore
@@ -47,6 +47,15 @@ app.config['SWAGGER'] = {
     'title': 'AirBnB clone Restful API',
     'uiversion': 3
 }
+
+app.config['UPLOAD_FOLDER'] = "../uploads"
+
+
+@app.route('/uploads/<filename>')
+def download_file(filename):
+    print(filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename, as_attachment=True)
 
 
 Swagger(app)

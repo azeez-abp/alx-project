@@ -1,11 +1,9 @@
 'use client'
-/*import Image from "next/image";*/
 import Button from "@/components/Button";
 import { useState } from "react";
 import Link from 'next/link'
-import {makeRequest} from '../../request'
 import { useRouter } from 'next/navigation'
-
+import { backend_path, makeRequest } from "../../request";
 
 const spinner_style = {
   position: 'absolute',
@@ -13,8 +11,23 @@ const spinner_style = {
   top: '-18px'
 }
 
-const Register = () => {
+const form_style = {
+  boxShadow: '0 4px 20px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+  padding: '1.3em',
+  borderRadius: '13px'
+}
 
+const show_password_style = {
+  right: '2px',
+  width: 'fit-content',
+  background: '#444',
+  top: '2px',
+  padding: '5px',
+  lineHeight: '1.4',
+  cursor:"pointer"
+}
+
+const Register = () => {
   const router = useRouter()
   const [loginState, setLoginState]  = useState({
    showLoader:false,
@@ -30,11 +43,14 @@ const Register = () => {
     "state": "",
     "city": "",
     "street": "",
-    "profile_pix": "",
+    "profile_image": "",
     "gender": "",
     "zip_code": "2000525"
 },
-   suc:false})
+   suc:false,
+   showPassword: false
+
+  })
   
   const disble_button = {
     pointerEvents: loginState.showLoader ? 'none' : 'all',
@@ -42,112 +58,140 @@ const Register = () => {
    cursor:loginState.showLoader? 'none' : 'pointer'
  }
 
-  /* @returns boolean
+ interface User {
+  [key: string]: string; // Define an index signature
+  email: string;
+  password: string;
+  first_name: string;
+  middle_name: string;
+  last_name: string;
+  date_of_birth: string;
+  state: string;
+  city: string;
+  street: string;
+  profile_image: string;
+  gender: string;
+  zip_code: string;
+}
+
+
+ /**
+  * signIn - function for regitering the form
+  * @param e: Event
+  * @returns boolean: true done, false failed
   */
- 
- interface ResponseDataErr{  
- response:{data:{error:string}};
- 
- }
- 
- interface ResponseDataSuc{  
-   data:string;
-   error:string;
-   success:string;
-   
-   }
- 
- 
-
-
-
   const signIn = (e: any) :boolean => {
      e.preventDefault()
      setLoginState({...loginState,showLoader:true,error:false})
-
-   
-     if (
-       loginState.inputData['email'] === undefined
-        || 
-       loginState.inputData['password']  === undefined
-     )
-       {
-         setLoginState({
-           ...loginState,
-           error:true,
-           info: "Email and password are required",
-           showLoader:false
-         })
-         return false
-       }
-   
-     try {
-         
- 
- 
-       makeRequest("users/register", loginState.inputData, (err:ResponseDataErr, data:ResponseDataSuc)=>{
-             console.log(err, data.error)
-         if (err)
-           {
-              
-             setTimeout(()=>{
-               setLoginState({...loginState,showLoader:false,error:true,info:err.response.data.error})
-             },3000)
-             return
-           }
-
-           if (data['error'] !== "" )
+     let i: any
+     let user: User = loginState.inputData
+      for (i in loginState.inputData)
+        {
+           if ( user.hasOwnProperty(i) && user[i] === "")
             {
-               
-              setTimeout(()=>{
-                setLoginState({...loginState,showLoader:false,error:true,info:data.error})
-              },3000)
-              return
+              setLoginState({
+                ...loginState,
+                error:true,
+                info: i.replaceAll("_", " ") + " is required",
+                showLoader:false
+              })
+              return false
             }
+        }
+
+         makeRequest("users/register", loginState.inputData, (err, data)=>{
+
+            if (err)
+              {  
+                
+                setTimeout(()=>{
+                  setLoginState({...loginState,showLoader:false,error:true,info:err.error})
+                },3000)
+                return
+              }
+
+              if (data['error'] !== null )
+                {
+                  
+                  setTimeout(()=>{
+                    setLoginState({...loginState,showLoader:false,error:true,info:data.error})
+                  },3000)
+                  return
+                }
 
 
- 
-           setTimeout(()=>{
-             setLoginState({...loginState,showLoader:false,error:false,info:"Registration successful",suc:true})
-           },3000)
- 
-          
-       })
-     } catch (error:any) {
-          
-         setLoginState({...loginState,showLoader:true,error:true, info: error.message})
-     }
+    
+              setTimeout(()=>{
+                setLoginState({...loginState,showLoader:false,error:false,info:"Registration successful",suc:true})
+              },3000)
+
+
+              setTimeout(()=>{
+                router.push("/login")
+              },3000)
     
  
-   return true
+          
+       }).catch(error=>{
+        setLoginState({...loginState,showLoader:false,error:true,info:error.message})
+       })
+
+       return true
   }
  
 
-  const handleFileChange = (e:any) => {
+  const handleFileChange = async(e:any) => {
+
+    e.preventDefault();
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      let data = {...loginState, inputData:{...loginState.inputData, 
-    
-        [e.target.name]: reader.result, 
-        [e.target.id]: e.target.value,
-       }}
-       console.log(reader.result)
-     setLoginState(data)
-    };
-    reader.readAsDataURL(file);
+ 
+    let form  = new FormData()
+
+    form.append("profile_image", file)
+  
+    makeRequest("users/upload",form, (err, data)=>{
+
+        if (err)
+         { 
+           return setLoginState({...loginState,showLoader:true,error:true, info: err.error})
+         } 
+
+         console.log(err, data)
+
+         if (data['error'] !== null )
+          {
+            setTimeout(()=>{
+              setLoginState({...loginState,showLoader:false,error:true,info:data.error})
+            },3000)
+            return false
+          }
+         
+          let data_:any = {}
+          let img = data.data.output_path_relative.replace("\\", "/")
+          console.log(img)
+
+          data_ = {...loginState, inputData:{...loginState.inputData, profile_image: img}}
+          setLoginState(data_)
+  
+      
+
+     }, "POST", {'Content-Type': 'multipart/form-data'}).catch(error=>{
+      setLoginState({...loginState,showLoader:true,error:true, info: error.message})
+     })
+     
+     return true
   };
 
 
  const getInput = (e:any)=>{
-   e.preventDefault()
+  e.preventDefault()
   let data:any = {}
-     data = {...loginState, inputData:{...loginState.inputData, [e.target.name]: e.target.value }}
-     setLoginState(data)
+  data = {...loginState, inputData:{...loginState.inputData, [e.target.name]: e.target.value }}
+  setLoginState(data)
  }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 text-white">
+    <main className="flex min-h-screen flex-col items-center justify-between  text-white">
 
     <div className="flex min-h-full flex-1 w-full flex-col justify-center px-6 py-0 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm relative">
@@ -157,7 +201,7 @@ const Register = () => {
           alt="Your Company"
         />
         
-        
+         {loginState.inputData.profile_image && (<img className="mx-auto h-20 w-20 rounded-full object-cover" src={backend_path+'/'+loginState.inputData.profile_image } alt="user profile pix"/>)}
 
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
           Register
@@ -174,7 +218,7 @@ const Register = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" action="#" method="POST">
+        <form className="space-y-6" action="#" method="POST" style={form_style} >
         <div>
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
               First name
@@ -246,18 +290,39 @@ const Register = () => {
               />
             </div>
           </div>
-
+          
+          <div>
+            <div className="flex items-center justify-between">
+              <label htmlFor="password" className="block text-sm font-medium leading-6 text-white">
+                Password
+              </label>
+            
+            </div>
+            <div className="mt-2 relative">
+              <input
+                id="password"
+                name="password"
+                type= {loginState.showPassword? "text" : "password"}
+                onInput={(e)=>getInput(e)}
+                autoComplete="current-password"
+                required
+                className="block w-full rounded-md border-0 py-1.5 px-2 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+              <span className="absolute" style={show_password_style} 
+              onClick={()=>setLoginState({...loginState, showPassword: !loginState.showPassword})} >show</span>
+            </div>
+          </div>
+           
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
              Date of birth
             </label>
             <div className="mt-2">
-              <input
-                id="dob"
+              <input id="dob"
                 name="date_of_birth"
                 type="date"
-                autoComplete="date"
+                autoComplete="false"
                 onInput={(e)=>getInput(e)}
                 required
                 className="block w-full rounded-md border-0 py-1.5 px-2 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -322,26 +387,7 @@ const Register = () => {
 
 
          
-          <div>
-            <div className="flex items-center justify-between">
-              <label htmlFor="password" className="block text-sm font-medium leading-6 text-white">
-                Password
-              </label>
-            
-            </div>
-            <div className="mt-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                onInput={(e)=>getInput(e)}
-                autoComplete="current-password"
-                required
-                className="block w-full rounded-md border-0 py-1.5 px-2 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-           
+        
           <div>
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
               Last name
@@ -361,7 +407,7 @@ const Register = () => {
           {/* <span className="label-text">Pick a file</span>
           <span className="label-text-alt">Alt label</span> */}
         </div>
-        <input type="file" id="profile_pix_name" onInput={handleFileChange} name="profile_pix" className="file-input file-input-bordered w-full max-w-xs" />
+        <input type="file" id="profile_pix_name" onInput={handleFileChange} name="profile_image" className="file-input file-input-bordered w-full max-w-xs" />
         <div className="label">
         
         </div>
@@ -375,7 +421,7 @@ const Register = () => {
           </div>
         </form>
         <p className="mt-10 text-center text-sm text-gray-500">
-          Not a member?{' '}
+          Already a member?{' '}
           <Link href="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
            Login
           </Link>

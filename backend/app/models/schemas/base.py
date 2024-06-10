@@ -3,8 +3,7 @@
 Contains class BaseModel
 """
 from datetime import datetime
-from sqlalchemy import Column, String, DateTime  # type: ignore
-import uuid
+from sqlalchemy import Column, BigInteger, DateTime  # type: ignore
 from app.models.storage_engine import storage
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -12,14 +11,14 @@ time = "%Y-%m-%dT%H:%M:%S.%f"
 class BaseModel:
     """The BaseModel class from which future classes will be derived"""
 
-    id = Column(String(60), primary_key=True)
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
     def __init__(self, **kward):
         """Initialization of the base model"""
         print(kward, "ANOTHER")
-        self.id = str(uuid.uuid4())
+        self.id
         self.created_at = datetime.utcnow()
         self.updated_at = self.created_at
         for key, value in kward.items():

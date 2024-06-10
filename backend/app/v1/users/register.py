@@ -1,55 +1,36 @@
 from flask import request  # type: ignore
 from flasgger.utils import swag_from  # type: ignore
-from flask_restful import (Resource,  # type: ignore
-                           reqparse,
-                           fields,
-                           marshal_with)
+from flask_restful import Resource, marshal_with  # type: ignore
 from app.models.schemas.users.user import Users
 from app.models.schemas.general.address import Addresses
 from app.libs.password import hash_password
 import uuid
-from app.libs.upload_file import upload
-# Define the expected structure for success and error responses
-response_obj_template = {
-    'success': fields.String,
-    'user_id': fields.String,
-    'email': fields.String,
-    'error': fields.String(attribute='error')
-    # This line is only to illustrate the structure
-}
+from app.v1.response_object import response_obj_template
+from app.models.storage_engine import storage
+from sqlalchemy import select  # type: ignore
+
+""" Define the expected structure for success and error responses"""
 
 
-# Define a resource class for user registration
 class UserRegister(Resource):
     """Class for registering a user."""
-    @swag_from('documentation/register.yml')
     @marshal_with(response_obj_template)
+    @swag_from('documentation/register.yml',  methods=['POST'])
     def post(self):
-        parser = reqparse.RequestParser()
-        # Validate input
-        parser.add_argument('first_name', type=str, required=True,
-                            help='First name must be a \
-                                string and cannot be blank')
-        parser.add_argument('last_name', type=str, required=True,
-                            help='Last name must be a \
-                                string and cannot be blank')
-        parser.add_argument('email', type=str, required=True,
-                            help='Email must be a string and cannot be blank')
-        parser.add_argument('password', type=str, required=True,
-                            help='Password must be a \
-                                string and cannot be blank')
-        parser.add_argument('street', type=str, required=True,
-                            help='Street must be a \
-                                string and cannot be blank')
-        parser.add_argument('file', type=str, required=False)
+        """Post methiod that handle user registration"""
 
         data_all = request.get_json()
-        print(data_all['profile_pix_name'], "ALL DATRA")
-        output_path = upload(data_all['profile_pix'],
-                             data_all['profile_pix_name'])
-        if 'error' in output_path:
-            return {'error': output_path['error']}
-        print(output_path, "MO")
+        data = storage.get_instance().scalar(select(Users).
+                                             where(Users.email ==
+                                                   str(data_all['email'])))
+        if data is not None:
+            error_response = {
+                'success': None,
+                'data': None,
+                'error': f'User with {data_all['email']} already exist'
+            }
+            return error_response, 400
+
         user_id = uuid.uuid4()
         new_address = Addresses(
             user_id=user_id,
@@ -61,7 +42,7 @@ class UserRegister(Resource):
         new_user = Users(
             user_id=user_id,
             first_name=data_all['first_name'],
-            profile_pix=data_all['profile_pix'],
+            profile_pix=data_all['profile_image'],
             middle_name=data_all['middle_name'],
             last_name=data_all['last_name'],
             email=data_all['email'],
@@ -76,13 +57,13 @@ class UserRegister(Resource):
                 'success': 'User successfully registered',
                 'user_id': str(user_id),
                 'email': data_all['email'],
-                'error': ''
+                'error': None
             }
-            return response, 201
+            return response, 200
         except Exception as e:
             error_response = {
-                'success': '',
-                'data': {},
+                'success': None,
+                'data': None,
                 'error': f'User registration failed {e._message}'
             }
             return error_response, 400

@@ -2,6 +2,16 @@ This is the endpoint for user login
 ---
 tags:
   - User login
+parameters:
+  - name: body
+    in: body
+    properties:
+      email:
+        type: string
+        description: The user email.
+      password:
+        type: string
+        description: The user password.
 responses:
   400:
     description: 
@@ -13,17 +23,15 @@ responses:
       type: array
       items:
         properties:
-          __class__:
-            type: string
-          created_at:
+          sucess:
             type: string
             description: time of creation of the instance
-          updated_at:
+          error:
              type: string
              description: time of last update of the instance
-          id:
+          user_id:
             type: string
             description: The uuid of the instance
-          name:
+          email:
              type: string
              description: amenity name

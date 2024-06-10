@@ -1,10 +1,10 @@
 'use client'
-/*import Image from "next/image";*/
 import Button from "@/components/Button";
 import { useState } from "react";
 import Link from 'next/link'
 import {makeRequest} from '../../request'
 import { useRouter } from 'next/navigation'
+import { error } from "console";
 
 
 const spinner_style = {
@@ -28,20 +28,6 @@ export default function Home(): any {
       opacity:loginState.showLoader ? '0.4' : '1',
       cursor:loginState.showLoader ? 'none' : 'pointer'
     }
-/**
- * sigIn - function for signing user
- * @returns boolean
- */
-
-interface ResponseDataErr{  
-response:{data:{error:string}};
-
-}
-
-interface ResponseDataSuc{  
-  data:string;
-  
-  }
 
 
  const signIn = (e: any) :boolean => {
@@ -63,11 +49,8 @@ interface ResponseDataSuc{
         return false
       }
   
-    try {
-        
 
-
-      makeRequest("users/login", loginState.inputData, (err:ResponseDataErr, data:ResponseDataSuc)=>{
+      makeRequest("users/login", loginState.inputData, (err, data)=>{
         console.log(data, err)
         if (err)
           {
@@ -84,16 +67,13 @@ interface ResponseDataSuc{
 
           localStorage.setItem("alx_token", data.data)
           setTimeout(()=>{
-            console.log("redirect")
+            
             router.push('/dashboard')
           },2000)
-      })
-    } catch (error:any) {
-     
+      }).catch(error=>{
         setLoginState({...loginState,showLoader:true,error:true, info: error.message})
-    }
-   
-
+      })
+  
   return true
  }
 
