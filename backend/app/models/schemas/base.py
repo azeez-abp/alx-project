@@ -5,6 +5,7 @@ Contains class BaseModel
 from datetime import datetime
 from sqlalchemy import Column, BigInteger, DateTime  # type: ignore
 from app.models.storage_engine import storage
+
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
 
@@ -27,8 +28,9 @@ class BaseModel:
 
     def __str__(self) -> str:
         """String representation of the BaseModel class"""
-        return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id,
-                                         self.__dict__)
+        return "[{:s}] ({:s}) {}".format(
+            self.__class__.__name__, self.id, self.__dict__
+        )
 
     @classmethod
     def add(cls: object, users: list) -> list:

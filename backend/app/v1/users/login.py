@@ -1,6 +1,7 @@
 """This file is the login module for the user"""
+
 from flasgger.utils import swag_from  # type: ignore
-from flask_restful import Resource, marshal_with    # type: ignore
+from flask_restful import Resource, marshal_with  # type: ignore
 from app.models.storage_engine import storage
 from sqlalchemy import select  # type: ignore
 from app.models.schemas.users.user import Users
@@ -12,22 +13,23 @@ from app.v1.response_object import response_obj_template
 
 class UserLogin(Resource):
     @marshal_with(response_obj_template)
-    @swag_from('documentation/login.yml')
+    @swag_from("documentation/login.yml")
     def post(self):
         body = request.json
         print(body)
-        data = storage.get_instance().scalar(select(Users).
-                                             where(Users.email ==
-                                                   str(body.get('email'))))
+        data = storage.get_instance().scalar(
+            select(Users).where(Users.email == str(body.get("email")))
+        )
         # data = storage.get_instance().query(Users).
         # get({"email": request.json.get('email')})
         # Convert the data into a format that can tbe serialized to JS#ON
-        
+
         if data is None:
-            return {"error": "User with email {} not found".
-                    format(body.get('email')),
-                    "success": ""}, 400
-        pass_check = check_password(body.get('password'), data.password)
+            return {
+                "error": "User with email {} not found".format(body.get("email")),
+                "success": "",
+            }, 400
+        pass_check = check_password(body.get("password"), data.password)
         # pa = body.get('password')
 
         if pass_check is not True:

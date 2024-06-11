@@ -5,9 +5,9 @@ from typing import Dict, Type
 
 
 response_obj_template: Dict[str, Type[fields.Raw]] = {
-    'data': fields.Raw,
-    'success': fields.String,
-    'user_id': fields.String,
-    'email': fields.String,
-    'error': fields.String(attribute='error')
+    "data": fields.Raw,
+    "success": fields.String,
+    "user_id": fields.String,
+    "email": fields.String,
+    "error": fields.String(attribute="error"),
 }

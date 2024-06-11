@@ -8,11 +8,11 @@ from sqlalchemy import Column, String, ForeignKey, Integer  # type: ignore
 
 class Addresses(BaseModel, Base):
     """Representation of an address"""
-    __tablename__ = 'addresses'
+
+    __tablename__ = "addresses"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(String(60), ForeignKey('users_account.user_id'),
-                     nullable=False)
+    user_id = Column(String(60), ForeignKey("users_account.user_id"), nullable=False)
     street = Column(String(128), nullable=False)
     city = Column(String(128), nullable=False)
     state = Column(String(128), nullable=False)

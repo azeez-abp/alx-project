@@ -9,7 +9,8 @@ from app.models.storage_engine import storage
 
 class Users(BaseModel, Base):
     """Representation of a user"""
-    __tablename__ = 'users_account'
+
+    __tablename__ = "users_account"
     user_id = Column(String(60), unique=True, nullable=False)
     first_name = Column(String(60), nullable=False)
     profile_pix = Column(String(120), nullable=False)
@@ -19,12 +20,12 @@ class Users(BaseModel, Base):
     password = Column(String(225), nullable=False)  # Changed to LargeBinary
     gender = Column(String(15), nullable=False)
     date_of_birth = Column(DateTime, nullable=False)
-    addresses = relationship("Addresses", backref="users",
-                             cascade="all, delete, delete-orphan")
+    addresses = relationship(
+        "Addresses", backref="users", cascade="all, delete, delete-orphan"
+    )
 
     def __init__(self, **kward):
         """Initializes user"""
-        print(kward, "IS KW")
         super().__init__(**kward)
 
 
