@@ -2,8 +2,11 @@
 set -oeu
 
 python3  -m venv venv
+ls -al
 
-venv/Scripts/activate
+if [[ -d 'venv/Scripts/activate'  ]] then 
+    venv/Scripts/activate
+fi
 
 pip install -r  requirements.txt
 
