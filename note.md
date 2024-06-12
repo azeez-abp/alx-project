@@ -519,3 +519,8 @@ Plugin 'FEEDBACK' is disabled.
  (MySQLdb.OperationalError) (1813, "Tablespace for table '`dbname`.`tablename`' exists. Please DISCARD the tablespace before IMPORT")
 
  go into your data folder, delete the content of folder or the db folder
+
+ pytest --collect-only
+
+ pip install python-dotenv pytest-dotenv  for pytest to detect env variable
+
