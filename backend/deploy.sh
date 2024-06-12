@@ -10,8 +10,7 @@ fi
 
 "venv\Scripts\pip.exe" install -r  requirements.txt
 
-
-#flask --app app.app run --debug
+flask --app app.app run --debug
 
 
 
