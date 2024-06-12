@@ -1,14 +1,14 @@
 
 set -oeu
 
-python3  -m venv venv
-ls -al
+$(which python)  -m venv venv
 
-if [[ -d 'venv/Scripts/activate'  ]] then 
+
+if [[ -d 'venv/Scripts'  ]]; then 
     venv/Scripts/activate
 fi
 
-pip install -r  requirements.txt
+"venv\Scripts\pip.exe" install -r  requirements.txt
 
 
 #flask --app app.app run --debug
