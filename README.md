@@ -7,9 +7,9 @@ The application will consist of two components: Admin as application owner and F
 The admin will dynamically create a form that users can use to enter records of the activities on the farm.
 The component of the form depends on the operations in the farm.
 
-[Author LinkedIn Profile](https://www.linkedin.com/in/adio-azeez-adeyori-a70430148/)
-[Landing page url](https://alx-project-820z.onrender.com/)
-[Blog Page](https://medium.com/@adioadeyoriazeez/farm-monitoring-application-7a95f6199135)
+[Author LinkedIn Profile](https://www.linkedin.com/in/adio-azeez-adeyori-a70430148/) <br>
+[Landing page url](https://alx-project-820z.onrender.com/)<br>
+[Blog Page](https://medium.com/@adioadeyoriazeez/farm-monitoring-application-7a95f6199135)<br>
 
 
 ## Code quality tools
