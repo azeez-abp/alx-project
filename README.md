@@ -8,8 +8,8 @@ The admin will dynamically create a form that users can use to enter records of 
 The component of the form depends on the operations in the farm.
 
 [Author LinkedIn Profile](https://www.linkedin.com/in/adio-azeez-adeyori-a70430148/)
-(Landing page url)[https://alx-project-820z.onrender.com/]
-(Blog Page)[https://medium.com/@adioadeyoriazeez/farm-monitoring-application-7a95f6199135]
+[Landing page url](https://alx-project-820z.onrender.com/)
+[Blog Page](https://medium.com/@adioadeyoriazeez/farm-monitoring-application-7a95f6199135)
 
 
 ## Code quality tools
