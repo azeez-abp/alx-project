@@ -1,5 +1,3 @@
-#!/usr/bin bash
-
 set -oeu
 
 python3  -m venv venv
