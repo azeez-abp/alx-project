@@ -26,7 +26,8 @@ class UserLogin(Resource):
 
         if data is None:
             return {
-                "error": "User with email {} not found".format(body.get("email")),
+                "error": "User with email {} not found".
+                format(body.get("email")),
                 "success": "",
             }, 400
         pass_check = check_password(body.get("password"), data.password)
@@ -39,10 +40,5 @@ class UserLogin(Resource):
         # user_data = decode_(json_data)
         # print(user_data)
 
-        return {"success": "User to login successful", "data": json_data}, 200
+        return {"success": "User login successful", "data": json_data}, 200
 
-
-# @users_route.route("login", methods=['POST'], strict_slashes=False)
-# @swag_from('documentation/login.yml')
-# def login():
-#     return make_response(jsonify({"success": "User atempt to login"}), 200)
