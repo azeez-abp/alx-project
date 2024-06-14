@@ -1,28 +1,27 @@
 """This file is the login module for the user"""
 
 from flasgger.utils import swag_from  # type: ignore
-from flask_restful import Resource, marshal_with  # type: ignore
+from flask_restful import Resource  # type: ignore
 from app.models.storage_engine import storage
 from sqlalchemy import select  # type: ignore
 from app.models.schemas.users.user import Users
-from flask import request  # type: ignore
+from flask import request, make_response  # type: ignore
 from app.libs.password import check_password
 from app.libs.jwt import encodes_
-from app.v1.response_object import response_obj_template
+# from app.v1.response_object import response_obj_template
+from app.libs.cookies import CookieHandler
+import uuid
+from flask import jsonify  # Import jsonify
 
 
 class UserLogin(Resource):
-    @marshal_with(response_obj_template)
+    # @marshal_with(response_obj_template)
     @swag_from("documentation/login.yml")
     def post(self):
         body = request.json
-        print(body)
         data = storage.get_instance().scalar(
             select(Users).where(Users.email == str(body.get("email")))
         )
-        # data = storage.get_instance().query(Users).
-        # get({"email": request.json.get('email')})
-        # Convert the data into a format that can tbe serialized to JS#ON
 
         if data is None:
             return {
@@ -30,15 +29,18 @@ class UserLogin(Resource):
                 format(body.get("email")),
                 "success": "",
             }, 400
+
         pass_check = check_password(body.get("password"), data.password)
-        # pa = body.get('password')
 
-        if pass_check is not True:
-            return {"error": "Invalid credential", "data": ""}, 400
+        if not pass_check:
+            return jsonify({"error": "Invalid credential", "data": ""}), 400
+
         json_data = encodes_(data.user_id, data.email)
-        # print(data.email,  pass_check, json_data)
-        # user_data = decode_(json_data)
-        # print(user_data)
 
-        return {"success": "User login successful", "data": json_data}, 200
+        # Create a response object and set the cookie
+        response = make_response(jsonify({"success": "User login successful",
+                                          "data": json_data}))
+        CookieHandler.set_cookie(response, "farm", str(uuid.uuid4()),
+                                 60*60*24*7)
 
+        return response

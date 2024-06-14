@@ -16,6 +16,7 @@ app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 app.register_blueprint(users_route)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
 """parser = reqparse.RequestParser()"""
 
 UPLOAD_FOLDER = path.join(path.dirname(path.abspath(__file__)), "uploads")
