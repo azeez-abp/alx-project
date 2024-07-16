@@ -2,10 +2,6 @@
 /*import Image from "next/image";*/
 import Link from 'next/link'
 
-
-
-
-
 export default function Home(): any {
 
   return (
@@ -61,7 +57,7 @@ export default function Home(): any {
              <div>
               The project is a solution that enables farm owners <br/>
               to monitor workers activities on the farm.<br/>
-              This will able the owner to know the quatitatuve values of drug<br/>
+              This will able the owner to know the quatitative values of drug<br/>
               administered to the life stocks on the farm.
             
              </div>

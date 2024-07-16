@@ -30,17 +30,20 @@ def encodes_(user_id: str, email: str) -> str:
 
 def decode_(token):
     paths = f"{root_folder}app\\libs\\.ssh\\id_rsa.pub"
+    try:
+        with open(paths, "r") as key_:
+            public_key = key_.read()
+        key = serialization.load_ssh_public_key(public_key.encode())
 
-    with open(paths, "r") as key_:
-        public_key = key_.read()
-    key = serialization.load_ssh_public_key(public_key.encode())
+        data = jwt.decode(
+            jwt=token,
+            key=key,
+            algorithms=[
+                "RS256",
+            ],
+        )
+        return data
+    except Exception as e:
+        return {"error": "token has expire"}
 
-    data = jwt.decode(
-        jwt=token,
-        key=key,
-        algorithms=[
-            "RS256",
-        ],
-    )
 
-    return data

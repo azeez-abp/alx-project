@@ -4,8 +4,6 @@ import { useState } from "react";
 import Link from 'next/link'
 import {makeRequest} from '../../request'
 import { useRouter } from 'next/navigation'
-import { error } from "console";
-
 
 const spinner_style = {
   position: 'absolute',
@@ -29,17 +27,24 @@ export default function Home(): any {
       cursor:loginState.showLoader ? 'none' : 'pointer'
     }
 
+    
+
 
  const signIn = (e: any) :boolean => {
     e.preventDefault()
     setLoginState({...loginState,showLoader:true,error:false})
-  
+     console.log( loginState.inputData['email'] ,"rtyuiop")
     if (
-      loginState.inputData['email'] === undefined
+      loginState.inputData['email'] === ''
        || 
-      loginState.inputData['password']  === undefined
+       loginState.inputData['email'] ===  undefined
+       || 
+      loginState.inputData['password']  === ''
+      || 
+      loginState.inputData['password']  ===  undefined
     )
       {
+   
         setLoginState({
           ...loginState,
           error:true,
@@ -51,14 +56,13 @@ export default function Home(): any {
   
 
       makeRequest("users/login", loginState.inputData, (err, data)=>{
-        console.log(data, err)
+        console.log( err, data)
         if (err)
           {
-             
-            setTimeout(()=>{
-              setLoginState({...loginState,showLoader:false,error:true,info:err.response.data.error})
+           return setTimeout(()=>{
+              setLoginState({...loginState,showLoader:false,error:true,info:err.error})
             },3000)
-            return
+          
           }
 
           setTimeout(()=>{
@@ -125,7 +129,8 @@ const getInput = (e:any)=>{
                   autoComplete="email"
                   onInput={(e)=>getInput(e)}
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  placeholder="Enter Email"
+                  className="block bg-transparent pl-5 pr-5  w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -146,8 +151,9 @@ const getInput = (e:any)=>{
                   type="password"
                   onInput={(e)=>getInput(e)}
                   autoComplete="current-password"
+                  placeholder="Enter password"
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md text-gray-400 pr-5 pl-5 bg-transparent border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>

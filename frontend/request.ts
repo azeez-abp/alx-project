@@ -1,21 +1,24 @@
 
 
 import axios from 'axios'
-  export const backend_path  = "http://127.0.0.1:5000"
+  export const backend_path  = "http://localhost:5000"
+  axios.defaults.withCredentials = true; 
+
   export  const  makeRequest: (url: string, data: any, cb: (error?: object | null | any , response?: object | null | any) => void, mtd?: string, headers_opt?: any) => Promise<void> = async (url, data, cb, mtd, headers_opt) =>{
-  let   header_setting  = headers_opt !==null ?headers_opt: { 
+  let   header_setting  = headers_opt !==undefined ?headers_opt: { 
     //  'Content-Type': 'application/x-www-form-urlencoded',
       'Content-Type': 'application/json',
       'authorization': 'Bearer '+localStorage.getItem("alx_token")?localStorage.getItem("alx_token"):"",
      }
-     console.log(data, "DATA",mtd, headers_opt)
+     console.log(header_setting, "HEADER", headers_opt )
         const options = {
             method: mtd? mtd: 'POST',
             headers:header_setting,
             
             // body:  {userID:inp},
-             data:  data,
-            url:"http://127.0.0.1:5000/api/v1/"+ url,
+            //credentials: 'include',
+            data:  data,
+            url:`${backend_path}/api/v1/${url}`
           };
           try {
          //   console.log(app_domain_proxy+ url)
@@ -23,8 +26,6 @@ import axios from 'axios'
              let out  = d.data
                  console.log(typeof out.error, out.error, "TRY OUT")
               if(out.error){
-
-                  console.log(out, "Try Error")
                 return cb(out.error, null)
                }
                 
@@ -41,7 +42,7 @@ import axios from 'axios'
              error.response.data.hasOwnProperty('error')) 
              {
                return cb({error: error.response.data.error},null)// Property exists, safe to use error.response.dat
-            }
+             }
             
             return cb({error: error.message},null)
            

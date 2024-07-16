@@ -1,4 +1,4 @@
-from flask import Flask  # type: ignore
+from flask import Flask, jsonify  # type: ignore
 from datetime import datetime, timedelta, timezone
 
 app = Flask(__name__)
@@ -6,11 +6,20 @@ app = Flask(__name__)
 
 class CookieHandler:
     @staticmethod
-    def set_cookie(response, name, value, max_age, secure=True, httponly=True,
-                   samesite='Lax'):
+    def set_cookie(response, name, value, max_age, secure=False,
+                   httponly=False,
+                   samesite='None'):
+        #("SameSite must be 'Strict', 'Lax', or 'None'."
         expires = datetime.now(timezone.utc) + timedelta(seconds=max_age)
-        response.set_cookie(name, value, expires=expires, secure=secure,
-                            httponly=httponly, samesite=samesite)
+        response.set_cookie(name, value+"__"+ str(expires.timestamp()), 
+                            expires=expires, 
+                            secure=secure,
+                            httponly=httponly, 
+                            samesite=samesite,   #put this in production
+                            path="/",
+                            domain="localhost"  # your domain name dont use ip
+
+                            )
 
     @staticmethod
     def get_cookie(request, name):

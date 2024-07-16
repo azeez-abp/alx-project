@@ -31,3 +31,40 @@ body {
     text-wrap: balance;
   }
 }
+
+*{
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+.per{
+  width: 30px;
+  height: 30px;
+  background-color: #333;
+  position: absolute;
+}
+
+.side{
+  width: 20%;
+  height: 100vh;
+  background-color: #333;
+  float: left;
+}
+.body{
+  width: 80%;
+  height: 100vh;
+  background-color: #555;
+  float: right;
+}
+.mover{
+  width: 5px;
+  height: 100vh;
+  background-color: #101010;
+  float: right;
+}
+.mover:hover{
+
+  background-color: red;
+  cursor: e-resize;
+
+}

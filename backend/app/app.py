@@ -6,27 +6,23 @@ from flask_restful import Resource, Api  # type: ignore
 from flask_cors import CORS  # type: ignore
 from flasgger import Swagger  # type: ignore
 from app.v1.users import users_route
+from app.v1 import token_route
 
-# from flasgger.utils import swag_from
-print(
-    __name__,
-)
 app = Flask(__name__)
 
+CORS(app, resources={r"/*": {"origins": "*"}},
+     supports_credentials=True) 
+
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
+
 app.register_blueprint(users_route)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+app.register_blueprint(token_route)
 
 """parser = reqparse.RequestParser()"""
 
 UPLOAD_FOLDER = path.join(path.dirname(path.abspath(__file__)), "uploads")
 if not path.exists(UPLOAD_FOLDER):
     makedirs(UPLOAD_FOLDER)
-
-
-# @app.route('/uploads/<filename>')
-# def get_image(filename):
-#     return send_from_directory(UPLOAD_FOLDER, filename)
 
 
 @app.teardown_appcontext

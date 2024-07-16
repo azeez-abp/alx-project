@@ -12,7 +12,7 @@ The component of the form depends on the operations in the farm.
 [Blog Page](https://medium.com/@adioadeyoriazeez/farm-monitoring-application-7a95f6199135)<br>
 
 
-## Code quality tools
+## Code quality tools 
 - black -> code formater
 - mypy -> type checker
 - isort -> order import tool
@@ -48,3 +48,35 @@ npm run dev
 -  No related project yet
 #  Licensing
 - The project is licensed under MIT
+
+
+# Cookie issue
+
+```
+Most times when you are workin with an application with both frontend and backend setting cookie may not 
+appear in the browse
+
+if you are using axio use  ``` axios.defaults.withCredentials = true ```
+
+if you are using fetch 
+
+fetch('http://localhost:5000/login', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    credentials: 'include', // This is crucial for sending cookies with requests
+    body: JSON.stringify({ email: 'user@example.com', password: 'password' })
+})
+
+for tour backensd 
+ response.set_cookie(
+            "farm",
+            str(uuid.uuid4()),
+            expires=expires,
+            secure=False,  # Set to True if using HTTPS
+            httponly=True,
+            samesite='Lax'
+        )
+
+```
